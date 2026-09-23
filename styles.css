@@ -1,0 +1,1075 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap");
+
+/* ============================================================
+   Farben, Abstände, Schatten und Zeiten stehen alle hier oben.
+   Wer die Anmutung ändern will, ändert Token — nicht Bauteile.
+
+   Die Anmutung nimmt Anleihen beim Wirtshaus (dunkles Holz,
+   Filz, Beinweiß, Messing), bleibt aber flach und ruhig: keine
+   Texturbilder, keine Fasen, keine Schatten ohne Grund.
+   ============================================================ */
+
+:root {
+  /* Holz — der Rahmen um den Tisch */
+  --holz-900: #17110e;
+  --holz-800: #211813;
+  --holz-700: #2e211a;
+
+  /* Filz — die Tischfläche */
+  --filz-900: #0c261e;
+  --filz-800: #123328;
+  --filz-700: #174034;
+  --filz-600: #1d5241;
+
+  /* Bein — Karten und Text */
+  --bein-100: #fffdf8;
+  --bein-200: #f6f0e2;
+  --bein-300: #e4dac4;
+  --bein-400: #c9bda2;
+  --tinte: #1b1a15;
+
+  /* Messing — der eine Akzent */
+  --messing-300: #eccb8b;
+  --messing-400: #dcb063;
+  --messing-500: #c4923f;
+  --messing-600: #9d7128;
+
+  --gut: #74c48a;
+  --schlecht: #e88f88;
+  --warn: #8d3626;
+  --blau: #4f92cf;
+  --grau: #8b9691;
+
+  /* Farbzeichen */
+  --farbe-E: #8a6120;
+  --farbe-G: #2f7d3a;
+  --farbe-H: #c0392b;
+  --farbe-S: #d29100;
+
+  /* Die Farben der Farbzeichen — die Werte stammen aus den
+     gemeinfreien Zeichnungen von „Infanf" (Bay_*.svg auf Wikimedia
+     Commons) und sind damit die Vorlage, nicht eine Annäherung. */
+  --b-gelb: #ffd21e;
+  --b-rot: #e01b1b;
+  --b-rot-herz: #d40000;
+  --b-blau: #2222c8;
+  --b-gruen: #007f00;
+  --b-linie: #171310;
+
+  /* Die Bildfiguren nehmen dieselbe Palette. Vorher hatten sie eine
+     eigene, gedämpftere — neben den Zeichen der Vorlage sahen sie
+     danach aus wie aus einem anderen Blatt. */
+  --f-rot: var(--b-rot);
+  --f-gruen: var(--b-gruen);
+  --f-gold: var(--b-gelb);
+  --f-blau: var(--b-blau);
+  --f-haut: #f2d9bb;
+  --f-weiss: #fbf7ee;
+  --f-linie: var(--b-linie);
+
+  /* Maße */
+  --r-s: 6px;
+  --r-m: 10px;
+  --r-l: 16px;
+  --r-xl: 24px;
+  /* Kartenbreite — alles andere rechnet daraus. Wächst jetzt mit dem
+     Fenster: 62 px waren am PC in einer 820 px breiten Spalte
+     verloren, und auf dem Handy blieb der Fächer halb so breit wie
+     der Schirm. Die Höhe begrenzt mit (16.5vh), sonst schiebt ein
+     flaches Fenster die Hand unter die Tableiste. */
+  --kw-basis: clamp(64px, min(7.1vw, 16.5vh), 116px);
+  --kw: var(--kw-basis);
+  --kw-klein: 60px;                    /* Auswertung, Übung */
+  --rw: calc(var(--kw-basis) * .21);   /* Kartenrücken im Spielerkasten */
+
+  /* Schatten */
+  --schatten-1: 0 1px 2px rgba(0, 0, 0, .3);
+  --schatten-2: 0 4px 10px -2px rgba(0, 0, 0, .45);
+  --schatten-3: 0 14px 30px -10px rgba(0, 0, 0, .6);
+
+  /* Zeiten */
+  --schnell: .14s;
+  --mittel: .26s;
+  --ruhig: .45s;
+  --kurve: cubic-bezier(.22, .8, .3, 1);
+
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Fraunces", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--holz-900);
+  color: var(--bein-200);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+  font-optical-sizing: auto;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding-bottom: env(safe-area-inset-bottom);
+  background: radial-gradient(140% 100% at 50% 0%, var(--holz-700) 0%, var(--holz-900) 70%);
+}
+
+/* ---------- Kopfzeile ---------- */
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(0, 0, 0, .12));
+  border-bottom: 1px solid rgba(196, 146, 63, .22);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--display);
+  font-size: 18px;
+}
+.brand em { font-style: normal; color: var(--messing-400); }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 27px; height: 36px;
+  background: linear-gradient(165deg, var(--bein-100), var(--bein-300));
+  color: var(--filz-800);
+  border-radius: 5px;
+  font-weight: 700;
+  box-shadow: var(--schatten-2);
+}
+
+.scoreboard { display: flex; gap: 16px; margin-left: auto; font-size: 13px; }
+.sc { display: flex; gap: 6px; align-items: baseline; }
+.sc i { font-style: normal; color: var(--grau); }
+.plus { color: var(--gut); }
+.minus { color: var(--schlecht); }
+
+.bar-tools { display: flex; align-items: center; gap: 8px; }
+.lvl { font-size: 12px; color: var(--grau); display: flex; align-items: center; gap: 6px; }
+
+select, input[type="search"] {
+  font: inherit;
+  font-size: 14px;
+  color: var(--bein-200);
+  background: rgba(255, 255, 255, .07);
+  border: 1px solid rgba(242, 236, 224, .2);
+  border-radius: var(--r-s);
+  padding: 7px 9px;
+  transition: border-color var(--schnell) ease;
+}
+select:focus-visible, input[type="search"]:focus-visible {
+  outline: none;
+  border-color: var(--messing-500);
+  box-shadow: 0 0 0 3px rgba(196, 146, 63, .25);
+}
+input[type="search"] { width: 100%; margin-bottom: 16px; }
+
+button { font: inherit; cursor: pointer; }
+.ghostbtn {
+  background: rgba(255, 255, 255, .04);
+  color: var(--bein-200);
+  border: 1px solid rgba(242, 236, 224, .22);
+  border-radius: var(--r-s);
+  padding: 7px 11px;
+  font-size: 13px;
+  transition: border-color var(--schnell) ease, background var(--schnell) ease;
+}
+.ghostbtn:hover { border-color: var(--messing-500); background: rgba(196, 146, 63, .12); }
+.ghostbtn.quiet { padding: 7px 9px; color: var(--grau); }
+button.primary {
+  background: linear-gradient(180deg, var(--messing-400), var(--messing-500));
+  color: #221806;
+  border: none;
+  border-radius: var(--r-s);
+  padding: 11px 18px;
+  font-weight: 600;
+  box-shadow: var(--schatten-1);
+  transition: filter var(--schnell) ease, transform var(--schnell) ease;
+}
+button.primary:hover { filter: brightness(1.08); }
+button.primary:active { transform: translateY(1px); }
+button:disabled { opacity: .4; cursor: default; }
+:focus-visible { outline: 2px solid var(--messing-400); outline-offset: 2px; }
+
+/* ---------- Ansicht ---------- */
+
+main { flex: 1; display: flex; flex-direction: column; }
+main > section { display: none; padding: 16px 14px 22px; max-width: 820px; margin: 0 auto; width: 100%; }
+main > section.on { display: block; flex: 1 1 auto; }
+
+/* 820 px sind das Maß für Lesetext — für den Tisch sind sie zu wenig.
+   Der Spielschirm bekommt deshalb eine eigene Breite und wächst auch
+   in der Höhe mit, sonst klebt der Filz als Briefmarke in der oberen
+   Hälfte und darunter steht ein Drittel des Fensters leer. */
+#view-spiel { max-width: min(1200px, 100%); }
+#view-spiel.on { display: flex; flex-direction: column; }
+
+h2 { font-family: var(--display); font-weight: 500; font-size: 23px; margin: 0 0 6px; }
+h3 { font-family: var(--display); font-weight: 500; font-size: 17px; margin: 22px 0 8px; color: var(--messing-400); }
+.muted { color: var(--grau); font-size: 14px; }
+.small { font-size: 12px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+.status { margin-bottom: 12px; }
+.status-line { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.pill {
+  font-size: clamp(12px, .85vw, 14px);
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--messing-400), var(--messing-500));
+  color: #221806;
+  font-weight: 600;
+}
+.pill.ghost { background: none; color: var(--grau); border: 1px solid rgba(242, 236, 224, .18); font-weight: 400; }
+/* Die Spritze verdoppelt den Spielwert — das soll man sehen. */
+.pill.warn { background: var(--warn); color: #ffe9e2; }
+
+/* ---------- Der Tisch ---------- */
+
+.felt {
+  position: relative;
+  border-radius: var(--r-xl);
+  /* Nimmt die Höhe, die Kopfzeile, Fächer und Tableiste übrig lassen.
+     Die Obergrenze hält den Stich zusammen: auf einem hohen Schirm
+     würde die Raute sonst in der Fläche verschwimmen. */
+  /* Größencontainer, damit der Stich seine Karten aus der Filzhöhe
+     rechnen kann (siehe .trick). Gefahrlos: alle Kinder liegen absolut,
+     die Inhaltshöhe war also schon vorher null. Die Basis muss 0 sein,
+     nicht auto: mit auto lieferte Chrome 152 für 100cqh 0 px, obwohl
+     der Filz 275 px hoch stand — der Stich fiel auf Breite 0 zusammen.
+     Die Höhe des Filzes ist mit beiden Basen dieselbe. */
+  flex: 1 1 0;
+  container-type: size;
+  min-height: 320px;
+  max-height: calc(var(--kw-basis) * 6.2);
+  max-width: 1060px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 12px;
+  background: radial-gradient(120% 86% at 50% 14%, var(--filz-600) 0%, var(--filz-700) 42%, var(--filz-800) 72%, var(--filz-900) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .05),
+    inset 0 16px 44px rgba(0, 0, 0, .32),
+    var(--schatten-3);
+}
+/* Messingreif — ein Strich, kein Rahmen */
+.felt::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(196, 146, 63, .2);
+  border-radius: calc(var(--r-xl) - 6px);
+  pointer-events: none;
+}
+
+.seatpos { position: absolute; font-size: clamp(13px, .95vw, 16px); z-index: 2; }
+.north { top: 12px; left: 50%; transform: translateX(-50%); text-align: center; }
+.west { left: max(12px, 4%); top: 48%; transform: translateY(-50%); }
+.east { right: max(12px, 4%); top: 48%; transform: translateY(-50%); text-align: right; }
+
+.seat {
+  padding: .55em .8em;
+  border-radius: var(--r-m);
+  background: rgba(0, 0, 0, .2);
+  border: 1px solid transparent;
+  transition: border-color var(--mittel) ease, background var(--mittel) ease;
+}
+.seat.active {
+  border-color: rgba(220, 176, 99, .55);
+  background: rgba(196, 146, 63, .14);
+}
+.seat .who { font-weight: 600; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.east .seat .who { justify-content: flex-end; }
+.north .seat .who { justify-content: center; }
+.seat.active .who { color: var(--messing-300); }
+
+.tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--blau);
+  color: #fff;
+  font-weight: 600;
+}
+.tag.partner { background: var(--farbe-G); }
+
+/* Verdeckte Hand: ein leicht gefächerter Stapel */
+.backs { display: flex; margin-top: 6px; height: calc(var(--rw) * 1.5); }
+.east .backs { justify-content: flex-end; }
+.north .backs { justify-content: center; }
+/* Messing-Rautengitter auf Dunkelrot — dieselbe Palette wie Tisch
+   und Bande. Das Blau vorher gehörte sichtbar zu einer anderen App. */
+.back {
+  width: var(--rw); height: calc(var(--rw) * 1.5);
+  margin-right: calc(var(--rw) * -.5);
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(45deg, rgba(220, 176, 99, .3) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(-45deg, rgba(220, 176, 99, .3) 0 1px, transparent 1px 5px),
+    linear-gradient(160deg, #7d2b22, #4a1713);
+  border: 1px solid rgba(220, 176, 99, .45);
+  box-shadow: var(--schatten-1);
+}
+.said { font-size: .85em; color: var(--messing-300); margin-top: 4px; }
+
+/* Der Stich in der Mitte */
+.trick {
+  position: absolute;
+  left: 50%;
+  /* Die Raute rechnet aus der Kartenbreite, nicht aus festen Pixeln —
+     sonst überlappen sich die vier Karten, sobald sie wachsen. Und sie
+     mittet sich in dem, was der Nordkasten übrig lässt, nicht im ganzen
+     Filz: sonst legt sich die Karte von oben auf den Namen des
+     Spielers, gemessen 45 px tief. */
+  top: calc(50% + 52px);
+  transform: translate(-50%, -50%);
+  /* Kartenbreite im Stich: die der Hand, solange der Filz Platz hat.
+     Im flachen Fenster reicht die Höhe darunter (100% - 116px, s. u.)
+     nicht für Nord und Süd übereinander — gemessen bei 1650x713 lagen
+     122 von 140 px der Südkarte unter der Nordkarte. Dann lieber die
+     ganze Raute kleiner. 100cqh ist die Inhaltshöhe des Filzes, also
+     Polsterhöhe minus 24 px; durch 3 lässt 0.1 Karten Luft. */
+  --kw-stich: min(var(--kw-basis), calc((100cqh - 92px) / 3));
+  width: min(calc(var(--kw-stich) * 3.4), 88%);
+  /* Der Abzug ist das Doppelte des Versatzes plus ein Rand: darunter
+     stiesse die Raute unten an die Bande und oben an den Nordkasten. */
+  height: min(calc(var(--kw-basis) * 3.55), calc(100% - 116px));
+  display: grid;
+  place-items: center;
+}
+.slot { position: absolute; z-index: 3; animation: einwerfen var(--mittel) var(--kurve) both; }
+.slot-n { top: 0;     --von-x: 0;                            --von-y: calc(var(--kw-basis) * -.55); }
+.slot-s { bottom: 0;  --von-x: 0;                            --von-y: calc(var(--kw-basis) * .55); }
+.slot-w { left: 0;    --von-x: calc(var(--kw-basis) * -.55); --von-y: 0; }
+.slot-e { right: 0;   --von-x: calc(var(--kw-basis) * .55);  --von-y: 0; }
+
+@keyframes einwerfen {
+  from { opacity: 0; transform: translate(var(--von-x), var(--von-y)) scale(.9); }
+  to   { opacity: 1; transform: none; }
+}
+/* Eine Karte, die schon liegt, wird nicht noch einmal eingeworfen.
+   Muss vor .slot.won stehen: der Stichgewinner soll seinen Schwung
+   auch dann bekommen, wenn er längst liegt. */
+.slot.liegt { animation: none; }
+
+.slot.won { animation: gewonnen var(--ruhig) var(--kurve) both; z-index: 3; }
+@keyframes gewonnen {
+  0%   { transform: none; }
+  100% { transform: translate(calc(var(--von-x) * -.24), calc(var(--von-y) * -.24)) scale(1.05); }
+}
+/* .sieger ist der Stichgewinner in der Rückschau: derselbe Ring, aber
+   ohne den Schwung — dort ist längst entschieden, wer ihn hat. */
+.slot.won .card,
+.slot.sieger .card {
+  box-shadow: 0 0 0 2px var(--messing-400), 0 10px 24px -6px rgba(0, 0, 0, .7);
+}
+
+/* Die Rückschau legt den letzten Stich noch einmal auf den Filz —
+   auf dieselbe Raute, in derselben Größe. Deshalb steht darin ein
+   echtes .trick und keine nachgebaute Geometrie: die Kartengröße im
+   Stich ist an drei Stellen eigens gesetzt (siehe .trick .card
+   .is-small), eine Kopie liefe davon weg.
+
+   Über .banner (4) und .slot (3), unter .modal (10). Das [hidden]
+   braucht seine eigene Zeile: eine Autorenregel schlägt das
+   [hidden] des Browsers, sobald hier je ein display steht. */
+.rueckschau {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  border-radius: var(--r-xl);
+  background: rgba(6, 16, 13, .9);
+  cursor: pointer;
+}
+.rueckschau[hidden] { display: none; }
+/* Beschriftung und Knopf oben: die Raute sitzt am Handy unten. */
+.rueckschau-note {
+  position: absolute;
+  left: 0; right: 0; top: 12px;
+  margin: 0;
+  text-align: center;
+  color: var(--messing-300);
+  font-size: clamp(13px, .95vw, 15px);
+}
+.rueckschau .ghostbtn { position: absolute; right: 10px; top: 8px; }
+
+.banner {
+  position: absolute;
+  left: 50%; bottom: 14px;
+  transform: translateX(-50%);
+  display: none;
+  gap: 12px;
+  align-items: center;
+  background: rgba(9, 26, 21, .94);
+  border: 1px solid rgba(220, 176, 99, .5);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: var(--schatten-2);
+  z-index: 4;
+}
+.banner.on { display: flex; animation: aufblenden var(--mittel) var(--kurve) both; }
+@keyframes aufblenden {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+.banner button {
+  background: linear-gradient(180deg, var(--messing-400), var(--messing-500));
+  border: none;
+  border-radius: 999px;
+  padding: 6px 13px;
+  color: #221806;
+  font-weight: 600;
+}
+
+/* Der Knopf für den letzten Stich steht neben der Zeile, nicht in
+   ihr — die Zeile sagt ja gerade, was angespielt ist. Der Platz für
+   ihn steht auf beiden Seiten, auch wenn kein Knopf da ist: sonst
+   rutscht "Herz ist angespielt" bei jedem Stichwechsel zur Seite,
+   und das siebenmal je Blatt. Dieselbe Vorkehrung wie bei .handzeile. */
+.stichzeile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.6vw, 18px);
+  margin: 10px 0 0;
+  --schau-breite: clamp(92px, 9vw, 124px);
+}
+.stichzeile::before { content: ""; flex: 0 0 var(--schau-breite); }
+/* Knopf und Platzhalter sind gleich breit, sonst steht die Zeile zwar
+   ruhig, aber um die halbe Differenz neben der Mitte. */
+#letzterstich { flex: 0 0 auto; min-width: var(--schau-breite); }
+/* Die Box bleibt stehen, nur die Tinte geht weg. Das display muss
+   ausdrücklich zurück: [hidden] des Browsers setzt display:none, und
+   visibility allein liesse den Platz trotzdem zusammenfallen — genau
+   wie bei .spritzebtn[hidden]. */
+#letzterstich[hidden] { display: inline-block; visibility: hidden; }
+
+.tricknote { text-align: center; color: var(--grau); font-size: clamp(13px, .95vw, 15px); min-height: 20px; margin: 0; }
+.handnote { text-align: center; color: var(--messing-300); font-size: clamp(13px, .95vw, 15px); min-height: 18px; margin: 8px 0 0; }
+
+/* ---------- Karten ---------- */
+
+/* Karton: flach und hell wie bedrucktes Papier. Der weiße 3px-Ring
+   von vorher war ein Lichthof, den keine gedruckte Karte hat — an
+   seiner Stelle steht jetzt eine Haarlinie in der Farbe des Blatts.
+   Nebeneffekt, den man haben will: im Fächer sieht man die Farbe
+   schon an der Kante. --karton geben die Zierlinien der Zeichen
+   weiter (siehe suitSvg in src/cards.js). */
+.card {
+  --karton: var(--bein-100);
+  position: relative;
+  width: var(--kw);
+  height: calc(var(--kw) * 1.45);
+  background: linear-gradient(172deg, var(--bein-100) 0%, var(--bein-200) 100%);
+  color: var(--tinte);
+  border-radius: calc(var(--kw) * .09);
+  padding: 0;
+  display: block;
+  border: none;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgba(27, 26, 21, .28),
+    inset 0 0 0 2px var(--bein-100),
+    inset 0 0 0 3px color-mix(in srgb, var(--farbe) 28%, transparent),
+    var(--schatten-2);
+}
+.card.is-small { --kw: var(--kw-klein); }
+/* Der Stich ist das, worauf man am Tisch schaut — dort zählt nicht
+   die Listengröße, sondern die der Handkarten. Auf .86 waren die vier
+   Karten in der Mitte kleiner als die eigenen, obwohl der Filz um sie
+   herum leer stand. Nur wenn der Filz zu flach ist, werden sie
+   kleiner statt sich zu überdecken (--kw-stich, siehe .trick). */
+.trick .card.is-small { --kw: var(--kw-stich); }
+
+/* Farbe des Blatts */
+.suit-E { --farbe: var(--farbe-E); }
+.suit-G { --farbe: var(--farbe-G); }
+.suit-H { --farbe: var(--farbe-H); }
+.suit-S { --farbe: var(--farbe-S); }
+
+/* Eckzeichen */
+.card-ecke {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  color: var(--farbe);
+  line-height: 1;
+}
+/* Ecke und Zeichenspalten teilen sich die Breite der Karte. Bei .22
+   lief die zweistellige Zehn unter das oberste Zeichen der linken
+   Spalte — gemessen 138 px² Überdeckung auf jeder Zehn. Die Ecke auf
+   .16 zu setzen war die Antwort an der falschen Seite: im Fächer ist
+   von der Karte nur die Ecke zu sehen, und dort war nicht mehr zu
+   erkennen, ob ein Ober oder ein König liegt. Jetzt rücken die Spalten
+   nach innen (siehe .rang-X .card-mitte), und die Ecke bekommt die
+   Größe zurück. Die Zehn bleibt der Fall, der die Breite bestimmt. */
+.card-ecke.tl { top: 4.5%; left: 4.5%; }
+.card-ecke.br { bottom: 4.5%; right: 4.5%; transform: rotate(180deg); }
+.ecke-rang {
+  font-weight: 700;
+  font-size: calc(var(--kw) * .19);
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+/* Gleich groß heißt nicht gleiches Kästchen: die vier Zeichen haben
+   verschiedene Seitenverhältnisse (Eichel 66:97, Gras 66:73, Schellen
+   66:72, Herz 66:64). In ein Quadrat gelegt, wurde die Eichel um 45 %
+   schmaler gezeichnet als das Herz — das kleinste Zeichen des Blattes
+   ausgerechnet dort, wo man die Farbe abliest. Maß ist deshalb die
+   Breite; die Eichel bekommt die Höhe, die sie dafür braucht. */
+.ecke-suit { width: calc(var(--kw) * .175); height: calc(var(--kw) * .19); }
+.suit-E .ecke-suit { height: calc(var(--kw) * .257); }
+
+/* Das Bildfeld in der Mitte */
+.card-mitte {
+  position: absolute;
+  inset: 15% 14%;
+  display: grid;
+  place-items: stretch;
+  color: var(--farbe);
+}
+/* Zahlkarten: die Spalten rücken nach innen, damit die Ecke wachsen
+   kann. Gezählt wird hier ohnehin nichts — der Rang steht im Eck, und
+   die Zeichen sagen nur, welche Farbe. */
+.rang-7 .card-mitte,
+.rang-8 .card-mitte,
+.rang-9 .card-mitte,
+.rang-X .card-mitte { inset: 16% 22%; }
+/* Die Figur füllte 82 % der Kartenbreite, und ihr Rand lag genau dort,
+   wo das größere Eckzeichen steht: links der Schaft der Hellebarde des
+   Obers, rechts der Thron des Königs. Auf dem gedruckten Blatt steht
+   die Figur im mittleren Drittel und die Ecken bleiben frei — hier
+   jetzt auch. */
+.rang-K .card-mitte,
+.rang-O .card-mitte,
+.rang-U .card-mitte { inset: 27% 20% 7%; }
+
+.card-pips {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(var(--zeilen), 1fr);
+  width: 100%; height: 100%;
+  place-items: center;
+}
+.pip {
+  display: grid;
+  place-items: center;
+  width: 100%; height: 100%;
+  /* Rasterzellen schrumpfen von sich aus nicht unter ihren Inhalt.
+     Ohne diese beiden Zeilen lief das Zeichenfeld bei zehn Zeichen
+     unten aus der Karte heraus. */
+  min-width: 0; min-height: 0;
+}
+.pip.is-kopf { transform: rotate(180deg); }
+.pip.is-mitte { position: absolute; inset: 0; }
+.pip-svg {
+  display: block;
+  width: 80%; height: 80%;
+  max-width: calc(var(--kw) * .13);
+  max-height: calc(var(--kw) * .13);
+}
+/* Dieselbe Rechnung wie im Eck: im quadratischen Feld wurde die Eichel
+   .088 breit gezeichnet, das Herz .126. Auf der Zehn bleibt sie
+   schmaler, dort begrenzt die Zeile — fünf Reihen lassen keine .19
+   Höhe zu. */
+.suit-E .pip-svg { max-height: calc(var(--kw) * .19); }
+/* Die Sau: großes Zeichen auf einer dünnen Linie in der Farbe des
+   Blatts, damit es nicht im leeren Feld schwebt. */
+.card-sau {
+  display: grid;
+  place-items: center;
+  width: 100%; height: 100%;
+  position: relative;
+}
+.card-sau::after {
+  content: "";
+  position: absolute;
+  left: 14%; right: 14%;
+  bottom: 12%;
+  height: 1px;
+  background: color-mix(in srgb, var(--farbe) 45%, transparent);
+}
+.sau-svg { width: calc(var(--kw) * .58); height: calc(var(--kw) * .58); }
+
+.card-bild { display: grid; place-items: center; width: 100%; height: 100%; }
+.card-figur {
+  width: 100%; height: auto;
+  grid-area: 1/1;
+  /* Die Figur steht auf dem Grund des Feldes, nicht in seiner Mitte —
+     sie hat Füße. */
+  align-self: end;
+}
+/* Die alten Bogen sind Linienstiche: jede Fläche hat einen Rand in
+   dunklem Braun, und erst der macht aus bunten Flecken eine Figur.
+   Die Strichstärke skaliert mit, weil das SVG-Feld mitskaliert. */
+.card-figur path {
+  stroke: var(--f-linie);
+  stroke-width: .45;
+  stroke-linejoin: round;
+  paint-order: stroke fill;
+}
+
+/* Die Augenzahl ist Lernhilfe, nicht Kartenbild: oben rechts, wo auf
+   keiner Karte etwas anderes steht. Unten links säße sie dem König
+   auf dem Sockel. */
+.card-pts {
+  position: absolute;
+  top: 7%; right: 8%;
+  font-size: calc(var(--kw) * .12);
+  color: rgba(27, 26, 21, .26);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Zustände */
+button.card {
+  transition: transform var(--schnell) var(--kurve), box-shadow var(--schnell) ease, filter var(--schnell) ease;
+}
+button.card:not(:disabled):hover,
+button.card:not(:disabled):focus-visible {
+  transform: translateY(calc(var(--kw) * -.22));
+  box-shadow:
+    inset 0 0 0 1px rgba(27, 26, 21, .28),
+    inset 0 0 0 2px var(--bein-100),
+    inset 0 0 0 3px color-mix(in srgb, var(--farbe) 55%, transparent),
+    0 16px 28px -8px rgba(0, 0, 0, .7);
+  outline: none;
+  z-index: 5;
+}
+/* Gesperrt heißt zweierlei: in der eigenen Hand „diese Karte darfst
+   du nicht legen" — das soll deutlich sein. In der Übung heißt es nur
+   „hier ist nichts zu wählen"; dort muss die Karte lesbar bleiben. */
+.card.is-disabled { filter: grayscale(.3) brightness(.9); }
+.hand .card.is-disabled { filter: grayscale(.55) brightness(.7); }
+/* Trumpf: eine Messing-Haarlinie statt der drei gestapelten Ringe
+   von vorher, dazu ein leichter Messington im Karton. Im Fächer
+   sieht man die Trümpfe damit auf einen Blick, ohne dass jede Karte
+   einen Rahmen um den Rahmen trägt. */
+.card.is-trump {
+  background: linear-gradient(172deg, #fffcf1 0%, #f6edd7 100%);
+  box-shadow:
+    inset 0 0 0 1px var(--messing-600),
+    inset 0 0 0 2px var(--bein-100),
+    inset 0 0 0 3px rgba(220, 176, 99, .55),
+    var(--schatten-2);
+}
+.card.is-selected { box-shadow: 0 0 0 2px var(--blau), var(--schatten-2); }
+/* Vorgemerkte Karte: liegt schon halb draußen */
+.card.is-armed {
+  transform: translateY(calc(var(--kw) * -.26));
+  box-shadow: 0 0 0 2px var(--messing-400), 0 18px 30px -10px rgba(0, 0, 0, .75);
+  z-index: 4;
+}
+
+/* ---------- Die eigene Hand ---------- */
+
+.hand {
+  display: flex;
+  justify-content: center;
+  padding: clamp(12px, 2vh, 26px) 0 8px;
+  min-height: calc(var(--kw) * 1.45 + 36px);
+}
+.hand .card {
+  margin-right: calc(var(--kw) * .08);
+  flex: 0 0 auto;
+}
+.hand .card:last-child { margin-right: 0; }
+
+/* Nur das frisch gegebene Blatt fliegt ein. Die Schranke fehlte:
+   is-frisch stand in keiner einzigen Regel, `geben` lief also bei
+   jedem Neuschreiben der Hand. Und neu geschrieben wird sie dreimal je
+   Stich — wenn ich drankomme (die unerlaubten Karten werden grau),
+   wenn ich lege, und wenn die Bots weitermachen (das Grau geht wieder
+   weg). Der Fächer verschwand dabei jedes Mal und flog zurück.
+   Dieselbe Bremse wie `.slot.liegt` beim Stich. */
+.hand.is-frisch .card {
+  animation: geben var(--ruhig) var(--kurve) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+@keyframes geben {
+  from { opacity: 0; transform: translateY(-38px) rotate(-6deg) scale(.86); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Der Spritzknopf ----------
+
+   Die Spritze wurde zweimal per Dialog gefragt — einmal vor der
+   ersten Karte, einmal danach — und hielt dafür jedes Mal den Tisch
+   an. Jetzt steht sie neben dem Fächer, solange die Regel sie
+   zulässt: drücken, wer will, sonst läuft weiter. Die Leiste am
+   unteren Rand zeigt die Bedenkzeit, die der Tisch einräumt. */
+.handzeile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 24px);
+  --spritz-breite: clamp(104px, 11vw, 148px);
+}
+/* Der Platz für den Knopf steht auf beiden Seiten, auch wenn kein
+   Knopf da ist: sonst rutscht der Fächer aus der Mitte, sobald das
+   Fenster zugeht — mitten im ersten Stich. */
+.handzeile::before { content: ""; flex: 0 0 var(--spritz-breite); }
+.handzeile .hand { flex: 0 0 auto; }
+.spritzebtn {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 var(--spritz-breite);
+  padding: 13px 12px 15px;
+  border: 1px solid rgba(220, 176, 99, .55);
+  border-radius: var(--r-m);
+  background: linear-gradient(180deg, #a8412e, var(--warn));
+  color: #ffeae4;
+  box-shadow: var(--schatten-2);
+  transition: filter var(--schnell) ease, transform var(--schnell) ease;
+  animation: spritz-auf var(--mittel) var(--kurve) both;
+}
+@keyframes spritz-auf {
+  from { opacity: 0; transform: translateY(6px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+/* Versteckt heißt hier unsichtbar, nicht weg — der Platz bleibt. */
+.spritzebtn[hidden] { display: flex; visibility: hidden; }
+.spritzebtn b { font-size: clamp(16px, 1.3vw, 20px); font-weight: 700; letter-spacing: .01em; }
+.spritzebtn span { font-size: 11px; opacity: .82; white-space: nowrap; }
+.spritzebtn:hover { filter: brightness(1.1); }
+.spritzebtn:active { transform: translateY(1px); }
+.spritzebtn::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: var(--messing-300);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.spritzebtn.laeuft::after { animation: frist var(--frist, 1600ms) linear both; }
+@keyframes frist {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+/* ---------- Auswertung ---------- */
+
+.lesson {
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(242, 236, 224, .09);
+  border-left: 3px solid var(--messing-500);
+  border-radius: 0 var(--r-m) var(--r-m) 0;
+  padding: 14px 16px;
+  margin: 14px 0;
+}
+.lesson header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.stich { color: var(--grau); }
+.verlust { font-weight: 600; }
+.verlust.hoch { color: var(--schlecht); }
+.verlust.mittel { color: var(--messing-400); }
+.verlust.klein { color: var(--grau); }
+/* Ein Buch-Hinweis ohne messbaren Verlust: Blau wie die Belegstelle
+   eines Prinzips, nicht Messing wie ein Fehler. */
+.lesson.hinweis { border-left-color: var(--blau); }
+.verlust.hinweis { color: var(--blau); font-weight: 500; }
+.neutral { font-size: 13px; margin: 9px 0; color: #cfe0ef; }
+.lesson-cards { display: flex; gap: 20px; margin: 12px 0; }
+.lesson-cards small { display: block; color: var(--grau); font-size: 11px; margin-bottom: 5px; }
+.note { font-size: 14px; margin: 9px 0; }
+/* Die Zahlen hinter dem Urteil — leiser als der Rat selbst. Glück und
+   Pech stehen daneben, nicht darin: sie sagen etwas über die Karten,
+   nicht über den Zug. */
+.chance { font-size: 13px; margin: 9px 0; color: var(--grau); }
+.glueck { font-size: 13px; margin: 9px 0; padding-left: 10px; border-left: 2px dashed var(--grau); color: #dcd6c8; }
+
+.prinzip { border-top: 1px solid rgba(242, 236, 224, .12); padding: 9px 0; }
+.prinzip summary { cursor: pointer; font-weight: 500; display: flex; justify-content: space-between; gap: 10px; }
+.prinzip summary::marker { color: var(--messing-500); }
+.prinzip p { font-size: 14px; color: #dcd6c8; }
+.bereich { color: var(--grau); font-size: 12px; font-weight: 400; }
+.buch { border-left: 2px solid var(--blau); padding-left: 10px; color: #cfe0ef; }
+
+/* Die Buchregel, nach der die Bots gezogen haetten. Messing statt Blau:
+   das hier ist der Rat, der am Tisch tatsaechlich gespielt wird, nicht
+   die Belegstelle zu einem Prinzip. */
+.buchregel {
+  border-left: 2px solid var(--messing-500);
+  padding-left: 10px; margin: 9px 0;
+  font-size: 14px; color: #e6d3ac;
+}
+.buchregel em { color: var(--bein-200); font-style: normal; }
+.buchregel.gefolgt { border-left-color: #6aa84f; color: #cfe3c2; }
+
+.empty { text-align: center; padding: 48px 12px; color: var(--grau); }
+.empty h2 { color: var(--bein-200); }
+
+/* ---------- Übung ---------- */
+
+.drill-trick { display: flex; gap: 12px; margin: 14px 0; }
+.mini { text-align: center; font-size: 11px; color: var(--grau); }
+.drill-hand { display: flex; gap: 5px; flex-wrap: wrap; margin: 14px 0; }
+.verdict { font-weight: 600; margin: 12px 0 4px; }
+.verdict.gut { color: var(--gut); }
+.verdict.schlecht { color: var(--schlecht); }
+.drilllist { list-style: none; padding: 0; margin: 16px 0 0; font-size: 13px; color: var(--grau); }
+.drilllist li { padding: 7px 0; border-bottom: 1px solid rgba(242, 236, 224, .09); }
+
+/* ---------- Tabs ---------- */
+
+.tabs {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background: rgba(23, 17, 14, .94);
+  border-top: 1px solid rgba(196, 146, 63, .25);
+}
+.tabs button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--grau);
+  padding: 14px 4px;
+  font-size: 13px;
+  border-top: 2px solid transparent;
+  transition: color var(--schnell) ease, border-color var(--schnell) ease;
+}
+.tabs button:hover { color: var(--bein-300); }
+.tabs button.on { color: var(--bein-100); border-top-color: var(--messing-400); }
+
+/* ---------- Dialog ---------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 16, 13, .74);
+  padding: 16px;
+  z-index: 10;
+}
+.modal.on { display: flex; }
+.sheet {
+  background: linear-gradient(180deg, var(--filz-700), var(--filz-900));
+  border: 1px solid rgba(220, 176, 99, .34);
+  border-radius: var(--r-l);
+  padding: clamp(22px, 3vw, 32px);
+  /* 470 px waren die Breite eines Handydialogs, auf dem Schirm daneben
+     stand Filz. Der Ansagedialog ist die wichtigste Entscheidung im
+     Blatt — er bekommt die Breite, die das Fenster hergibt. */
+  max-width: min(880px, 100%);
+  width: 100%;
+  max-height: 90dvh;
+  overflow: auto;
+  box-shadow: var(--schatten-3);
+  animation: hochschieben var(--mittel) var(--kurve) both;
+}
+@keyframes hochschieben {
+  from { opacity: 0; transform: translateY(14px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+.sheet h2 { margin-bottom: 8px; font-size: clamp(23px, 2.4vw, 31px); }
+.sheet .muted { font-size: clamp(14px, 1.1vw, 16px); }
+.bid-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+/* Der Ansagedialog fragt nach dem Blatt — also darf er es nicht
+   verdecken. Er stand mittig, der Faecher liegt am unteren Rand: die
+   wichtigste Entscheidung im Blatt wurde getroffen, ohne das Blatt zu
+   sehen. Eine kleine Kopie der acht Karten im Dialog war der erste
+   Versuch; sie machte den Dialog nur noch hoeher.
+
+   Jetzt steht der Dialog oben, und die Handzeile liegt ueber dem
+   Schleier statt darunter (z-index 11 gegen die 10 von .modal) — der
+   echte Faecher bleibt hell und lesbar. Die Hoehenschranke haelt den
+   Dialog auch auf flachen Schirmen vom Faecher fern; was nicht passt,
+   scrollt im Dialog. */
+.modal.ansage { align-items: flex-start; padding-top: clamp(8px, 2vh, 22px); }
+.modal.ansage .sheet { max-height: calc(100dvh - var(--kw-basis) * 1.45 - 150px); }
+body:has(#modal.ansage) .handzeile,
+body:has(#modal.ansage) .handnote { position: relative; z-index: 11; }
+
+button.bid {
+  text-align: left;
+  background: rgba(255, 255, 255, .05);
+  color: var(--bein-200);
+  border: 1px solid rgba(242, 236, 224, .18);
+  border-radius: var(--r-s);
+  padding: 15px 18px;
+  font-size: clamp(15px, 1.2vw, 18px);
+  transition: border-color var(--schnell) ease, background var(--schnell) ease, transform var(--schnell) ease;
+}
+button.bid:hover { border-color: var(--messing-500); background: rgba(196, 146, 63, .14); }
+button.bid:active { transform: translateY(1px); }
+.tally { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; }
+.tally span { display: flex; gap: 6px; }
+
+/* ---------- klein ---------- */
+
+@media (max-width: 600px) {
+  /* Auf dem Handy zählt die Kartenhöhe, nicht die Breite. Die Karten
+     werden größer als am PC-Maßstab und legen sich dafür weiter
+     übereinander — sichtbar bleibt der Streifen mit dem Eckzeichen,
+     genau so hält man einen Fächer auch in der Hand. Vorher waren es
+     52 px mit halbem Schirm daneben. */
+  :root {
+    --kw-basis: min(20.5vw, 88px);
+    --kw-klein: 52px;
+    --rw: 13px;
+  }
+  .bar { gap: 7px; padding: 7px 11px; }
+  /* Zwei Zeilen statt drei: Name plus Werkzeug oben, Punktestand
+     darunter. Jede gesparte Kopfzeile gewinnt der Filz. */
+  .brand { font-size: 15px; gap: 7px; }
+  .brand em { display: none; }
+  .brand-mark { width: 22px; height: 29px; font-size: 14px; }
+  .scoreboard { order: 3; width: 100%; margin-left: 0; justify-content: space-between; gap: 4px; font-size: 12px; }
+  .bar-tools { margin-left: auto; gap: 6px; }
+  .lvl { font-size: 0; gap: 0; }
+  .lvl select { font-size: 12px; padding: 6px 6px; max-width: 33vw; }
+  .ghostbtn { font-size: 12px; padding: 6px 9px; }
+  .ghostbtn.quiet { padding: 6px 7px; }
+
+  main > section { padding: 12px 11px 16px; }
+  .status { margin-bottom: 9px; }
+  .felt { min-height: 300px; max-height: none; padding: 9px; }
+  /* Zwischen den seitlichen Kästen bleibt auf dem Handy nur ein
+     schmaler Streifen — die Raute muss hineinpassen, sonst liegt die
+     Karte von rechts auf dem Nachbarn. */
+  .trick {
+    width: min(calc(var(--kw-basis) * 2.55), 76%);
+    height: min(calc(var(--kw-basis) * 3.2), 64%);
+    top: auto; bottom: 8px;
+    transform: translateX(-50%);
+  }
+  /* Auf dem Handy passen drei Spielerkästen und eine Kartenraute
+     nicht nebeneinander. Die Kästen rücken deshalb nach oben in eine
+     Reihe, die Raute bekommt die Mitte für sich. */
+  .west { top: 24%; left: 7px; transform: none; }
+  .east { top: 24%; right: 7px; transform: none; }
+  .seatpos { font-size: 12px; }
+  .backs { margin-top: 4px; }
+  .hand { padding: 10px 0 4px; }
+  /* Auf dem Handy nimmt der Fächer die ganze Breite — der Knopf
+     bekommt eine eigene Zeile darunter statt eines Platzhalters. */
+  .handzeile { flex-wrap: wrap; gap: 0; }
+  .handzeile::before { display: none; }
+  /* Am Handy ist die Zeile zu schmal für den doppelten Platz. Der
+     Knopf bleibt trotzdem sichtbar — er ist die ganze Funktion —,
+     und visibility statt display hält die Zeile weiterhin ruhig. */
+  .stichzeile::before { display: none; }
+  .stichzeile { gap: 8px; }
+  #letzterstich { font-size: 12px; padding: 5px 8px; min-width: 0; }
+  .spritzebtn { flex: 0 0 auto; width: auto; padding: 11px 22px 13px; margin-bottom: 4px; }
+  .spritzebtn[hidden] { display: none; }
+  /* Nur so weit übereinander, wie der Fächer es braucht: die
+     Überlappung ist fest, die Kartenzahl nicht. Bei den letzten drei
+     Karten sah die Hand sonst aus wie ein Stapel, obwohl der halbe
+     Schirm daneben frei war. */
+  .hand .card { margin-right: calc(var(--kw) * -.06); }
+  .hand:has(.card:nth-child(5)) .card { margin-right: calc(var(--kw) * -.18); }
+  .hand:has(.card:nth-child(6)) .card { margin-right: calc(var(--kw) * -.30); }
+  .hand:has(.card:nth-child(7)) .card { margin-right: calc(var(--kw) * -.44); }
+  .hand:has(.card:nth-child(8)) .card { margin-right: calc(var(--kw) * -.52); }
+  /* Die :has-Regeln sind spezifischer als `.hand .card:last-child` und
+     hängten der letzten Karte den negativen Rand mit an — der Fächer
+     stand dadurch um einen halben Kartenrand nach rechts versetzt und
+     stiess am Schirmrand an. */
+  .hand:has(.card) .card:last-child { margin-right: 0; }
+  /* Auf dem Handy ist der Stich das kleinere Übel: er wird so groß
+     wie die Handkarten, Platz ist in der Mitte da. */
+  .trick .card.is-small { --kw: var(--kw-basis); }
+  .tabs button { padding: 12px 4px; }
+}
+
+/* Breit, aber flach — das 1366x768-Notebook. Dort ist nicht die Breite
+   knapp, sondern die Hoehe: gemessen fehlten bei 720 px genau die
+   Zeile, die Kaesten und Raute uebereinander brauchen. Also kleinere
+   Karten, nicht eine gestauchte Raute. */
+@media (min-width: 601px) and (max-height: 820px) {
+  :root { --kw-basis: clamp(56px, min(6vw, 13.5vh), 112px); }
+  .felt { min-height: 260px; }
+  .hand { padding: 10px 0 6px; }
+}
+
+/* Kleines Handy, flacher Schirm (SE-Klasse, 360x640). Dort geht der
+   Faecher sonst unter die Tableiste: Kaesten und Raute brauchen mehr
+   Filz, als der Schirm nach Kopfzeile und Leiste uebrig hat. Also
+   ueberall eine Zeile weniger Luft. */
+@media (max-width: 600px) and (max-height: 700px) {
+  :root { --kw-basis: min(19vw, 76px); }
+  .bar { padding: 5px 10px; }
+  main > section { padding: 8px 10px 10px; }
+  .status { margin-bottom: 6px; }
+  .status-line { gap: 5px; }
+  .pill { padding: 4px 9px; }
+  .felt { min-height: 250px; }
+  /* Auf 250 px Filz stossen Kaestenreihe und Raute aneinander — gemessen
+     7 px tief. Die Raute wird niedriger und ihre Karten kleiner; dass
+     sich Nord und Sued dabei ein Stueck ueberdecken, ist in Ordnung:
+     das Eckzeichen sitzt oben und bleibt sichtbar. */
+  .trick { height: min(calc(var(--kw-basis) * 3.2), 56%); }
+  .trick .card.is-small { --kw: calc(var(--kw-basis) * .9); }
+  .stichzeile { margin-top: 6px; }
+  .tricknote { min-height: 16px; }
+  .rueckschau-note { top: 6px; }
+  .hand { padding: 7px 0 2px; }
+  .handnote { margin-top: 4px; min-height: 16px; }
+  .tabs button { padding: 10px 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Ansage: eine Zeile "Weiter", darunter die Spielarten als Gruppen.
+   Zwölf gleich aussehende Zeilen waren nicht zu überblicken — die
+   Spielart steht jetzt über der Gruppe, auf dem Knopf nur die Farbe. */
+button.bid.weiter {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.bid-gruppe {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid rgba(242, 236, 224, .1);
+}
+.bid-titel {
+  flex: 0 0 78px;
+  font-size: 14px;
+  color: var(--messing-400);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.bid-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+button.bid.chip {
+  padding: 10px 17px;
+  border-radius: 999px;
+  font-size: clamp(14px, 1.1vw, 16px);
+  text-align: center;
+}

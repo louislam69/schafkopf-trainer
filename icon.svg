@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="34" fill="#14352b"/>
+  <g transform="translate(38 34)">
+    <rect x="0" y="6" width="74" height="110" rx="10" fill="#d9d0be" transform="rotate(-9 37 61)"/>
+    <rect x="16" y="0" width="74" height="110" rx="10" fill="#f2ece0" stroke="#c4923f" stroke-width="2"/>
+    <path d="M53 84s-22-15-22-31c0-8 6-14 13-14 4 0 7 2 9 5 2-3 5-5 9-5 7 0 13 6 13 14 0 16-22 31-22 31z" fill="#a8322c"/>
+    <text x="26" y="24" font-family="Georgia, serif" font-size="20" font-weight="700" fill="#17201d">A</text>
+  </g>
+</svg>
