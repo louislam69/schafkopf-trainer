@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#211813" />
+<title>Schafkopf-Trainer</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icon.svg" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+
+<header class="bar">
+  <h1 class="brand">
+    <span class="brand-mark" aria-hidden="true">S</span>
+    <span>Schafkopf<em>Trainer</em></span>
+  </h1>
+  <div id="scoreboard" class="scoreboard" role="group" aria-label="Punktestand"></div>
+  <div class="bar-tools">
+    <div class="lvl">
+      <span id="level-titel">Gegner</span>
+      <button type="button" id="level" class="lvl-knopf" aria-haspopup="listbox" aria-expanded="false"
+        aria-controls="level-liste" aria-labelledby="level-titel level"></button>
+      <ul id="level-liste" class="lvl-liste" role="listbox" aria-labelledby="level-titel" hidden></ul>
+    </div>
+    <button type="button" id="newhand" class="ghostbtn">Neues Blatt</button>
+    <button type="button" id="resetscore" class="ghostbtn quiet" title="Punktestand zurücksetzen" aria-label="Punktestand zurücksetzen">↺</button>
+  </div>
+</header>
+
+<main>
+  <section id="view-spiel" class="on">
+    <div id="status" class="status"></div>
+
+    <div class="felt">
+      <div id="seat-2" class="seatpos north"></div>
+      <div id="seat-1" class="seatpos west"></div>
+      <div id="seat-3" class="seatpos east"></div>
+      <div id="trick" class="trick"></div>
+      <div id="banner" class="banner"></div>
+      <div id="rueckschau" class="rueckschau" hidden></div>
+      <div id="tipp" class="tipp" hidden></div>
+    </div>
+
+    <div class="stichzeile">
+      <button type="button" id="hinweisknopf" class="ghostbtn quiet" aria-expanded="false" aria-controls="tipp" hidden>Hinweis</button>
+      <p id="tricknote" class="tricknote"></p>
+      <button type="button" id="letzterstich" class="ghostbtn quiet" hidden>Letzter Stich</button>
+    </div>
+    <div class="handzeile">
+      <div id="hand" class="hand" role="group" aria-label="Deine Karten" tabindex="-1"></div>
+      <div class="spritzfeld">
+        <button type="button" id="spritze" class="spritzebtn" hidden></button>
+        <button type="button" id="spritzpause" class="ghostbtn spritzpause" hidden></button>
+      </div>
+    </div>
+    <p id="handnote" class="handnote"></p>
+    <!-- Vorleser: was am Tisch passiert, für Screenreader. Die sichtbaren
+         Zeilen darüber werden bei jedem Zeichnen neu geschrieben und
+         wären als Live-Region ein Dauerrauschen; hier landet jede
+         Meldung genau einmal (siehe sage() in src/ui.js). -->
+    <div id="vorleser" class="nur-sr" role="log" aria-live="polite"></div>
+  </section>
+
+  <section id="view-auswertung"></section>
+
+  <section id="view-uebung"></section>
+
+  <section id="view-regeln">
+    <h2>Regeln &amp; Prinzipien</h2>
+    <input id="rulesearch" type="search" aria-label="Regeln durchsuchen" placeholder="Suchen: Laufende, schmieren, Wenz …" />
+    <div id="rules-body"></div>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="Ansichten">
+  <button type="button" data-tab="spiel" class="on" aria-current="page">Spiel</button>
+  <button type="button" data-tab="auswertung">Auswertung</button>
+  <button type="button" data-tab="uebung">Übung</button>
+  <button type="button" data-tab="regeln">Regeln</button>
+</nav>
+
+<div id="modal" class="modal"></div>
+
+<script type="module" src="src/ui.js"></script>
+<script>
+  // nur in der veröffentlichten Version cachen, nie auf localhost
+  if (location.protocol === "https:" && "serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+</script>
+</body>
+</html>

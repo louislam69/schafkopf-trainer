@@ -1,0 +1,14 @@
+{
+  "name": "Schafkopf-Trainer",
+  "short_name": "Schafkopf",
+  "description": "Schafkopf gegen Bots spielen und dabei Regeln und Taktik lernen.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#17110e",
+  "theme_color": "#211813",
+  "lang": "de",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
